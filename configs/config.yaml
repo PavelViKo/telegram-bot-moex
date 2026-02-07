@@ -1,6 +1,6 @@
 # Telegram Bot Configuration
 telegram:
-  token: "8295067697:AAEkyRqKOugBq2fFDnIeLW9pdHIUbTyoYO8"
+  token: "YOUR_BOT_TOKEN_HERE"
   debug: false                   # Режим отладки
   updates_timeout: 60           # Таймаут обновлений (секунды)
 
