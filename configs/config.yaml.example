@@ -1,0 +1,76 @@
+# Telegram Bot Configuration
+telegram:
+  token: "YOUR_BOT_TOKEN_HERE"
+  debug: false
+  updates_timeout: 60
+
+# MOEX Fetcher API Configuration
+api:
+  url: "http://localhost:8080"
+  token: "your_api_token"
+  timeout: 30s
+  max_retries: 3
+  retry_delay: 2s
+
+# Bot Settings
+bot:
+  name: "MOEX Data Bot"
+  greeting: "Добро пожаловать! Я помогу вам работать с данными Московской биржи и анализировать их по стратегии 'Черепах'."
+  help_message: "Используйте команды для получения данных и анализа..."
+  rate_limit_interval: 1s
+  max_message_length: 4096
+  command_timeout: 5m
+  notification_chat_id: 0
+
+# Trading Strategy Configuration
+strategy:
+  turtles:
+    enabled: true
+    timeframe: "24"
+    lookback_period: 20
+    entry_breakout_days: 20
+    exit_breakout_days: 10
+    risk_per_trade: 0.02
+    position_sizing: true
+    atr_period: 20
+    atr_multiplier: 2.0
+    
+  notifications:
+    enabled: true
+    signal_chat_id: 0
+    daily_report: true
+    alert_on_breakout: true
+
+# Technical Analysis
+technical:
+  sma:
+    - 20
+    - 50
+    - 200
+  ema:
+    - 12
+    - 26
+  rsi_period: 14
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  bollinger_period: 20
+  bollinger_std: 2
+
+# Logging Configuration
+logging:
+  level: "info"
+  file: "logs/bot.log"
+  max_size_mb: 100
+  max_backups: 3
+  max_age_days: 30
+  json_format: false
+
+# Security Settings
+security:
+  allowed_users:
+    - 123456789
+    - 987654321
+  admin_users:
+    - 123456789
+  enable_auth: true

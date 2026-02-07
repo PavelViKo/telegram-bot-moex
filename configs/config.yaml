@@ -1,0 +1,111 @@
+# Telegram Bot Configuration
+telegram:
+  token: "8295067697:AAEkyRqKOugBq2fFDnIeLW9pdHIUbTyoYO8"
+  debug: false                   # Режим отладки
+  updates_timeout: 60           # Таймаут обновлений (секунды)
+
+# MOEX Fetcher API Configuration
+api:
+  url: "http://192.168.244.130:8080"
+  token: "t3YNs9azi+tWbm0NlzhZB0o7Iwz3qo7Wg61K13Omrg0="
+  timeout: 30s
+  max_retries: 3
+  retry_delay: 2s
+
+# Bot Settings
+bot:
+  name: "MoexAnaliticBot"
+  greeting: "Добро пожаловать! Я помогу вам работать с данными Московской биржи и анализировать их по стратегии 'Черепах'."
+  help_message: "Используйте команды для получения данных и анализа..."
+  rate_limit_interval: 1s
+  max_message_length: 4096
+  command_timeout: 5m
+  notification_chat_id: 0
+
+# Trading Strategy Configuration
+strategy:
+  turtles:
+    # Параметры стратегии "Черепах"
+    enabled: true
+    timeframe: "24"  # Таймфрейм для анализа (день)
+    lookback_period: 50  # Период для расчета максимумов/минимумов (дни)
+    entry_breakout_days: 20  # Дней для прорыва для входа
+    exit_breakout_days: 10   # Дней для прорыва для выхода
+    risk_per_trade: 0.02     # Риск на сделку (2%)
+    position_sizing: true    # Расчет размера позиции
+    atr_period: 14           # Период для Average True Range
+    atr_multiplier: 2.0      # Множитель для стоп-лосса на основе ATR
+    
+  notifications:
+    enabled: true
+    signal_chat_id: 1056608331  # ID чата для уведомлений (ваш ID или ID группы)
+    daily_report: true
+    alert_on_breakout: true
+    # Добавляем настройки частоты
+    analysis_schedule:
+      turtles: "0 * * * *"      # Каждый час
+      ma_crossover: "0 */2 * * *" # Каждые 2 часа
+    # Ограничения
+    max_signals_per_notification: 10  # Макс сигналов в одном уведомлении
+    min_confidence_percent: 60        # Минимальная уверенность для уведомления
+    
+  ma_crossover:  # НОВАЯ СТРАТЕГИЯ
+    enabled: true
+    timeframe: "24"          # Таймфрейм для анализа (день)
+    fast_period: 18           # Быстрая скользящая средняя (короткий период)
+    slow_period: 50          # Медленная скользящая средняя (длинный период)
+    signal_period: 9         # Сигнальная линия (опционально)
+    use_ema: false          # Использовать EMA вместо SMA (true для EMA, false для SMA)
+    use_volume_confirmation: true  # Требовать подтверждение объема
+    min_volume_multiplier: 1.5     # Минимальный множитель объема при сигнале
+    risk_per_trade: 0.02     # Риск на сделку (2%)
+    stop_loss_atr_multiplier: 2.0  # Множитель ATR для стоп-лосса
+    take_profit_ratio: 2.0   # Соотношение тейк-профит/стоп-лосс (2:1)
+    
+    # Настройки для разных типов пересечений
+    crossover_types:
+      golden_cross: true     # Золотое пересечение (быстрая выше медленной)
+      death_cross: true      # Мертвое пересечение (быстрая ниже медленной)
+      require_confirmation: 1 # Требовать N свечей подтверждения
+      
+    # Фильтры
+    filters:
+      trend_filter: "none"  # Фильтр по тренду (sma50, sma200, none)
+      rsi_filter: false       # Использовать RSI фильтр
+      rsi_overbought: 70
+      rsi_oversold: 30
+
+# Technical Analysis
+technical:
+  sma:
+    - 20
+    - 50
+    - 200
+  ema:
+    - 12
+    - 26
+  rsi_period: 14
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  bollinger_period: 20
+  bollinger_std: 2
+
+# Logging Configuration
+logging:
+  level: "info"
+  file: "logs/bot.log"
+  max_size_mb: 100
+  max_backups: 3
+  max_age_days: 30
+  json_format: false
+
+# Security Settings
+security:
+  allowed_users:
+    - 1056608331
+    - 757021261
+    - 5129750473
+  admin_users:
+    - 1056608331
+  enable_auth: true

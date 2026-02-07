@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  telegram-bot:
+    build: .
+    container_name: moex-telegram-bot
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - API_URL=http://moex-data-fetcher:8080
+      - API_TOKEN=${API_TOKEN}
+      - ALLOWED_USERS=${ALLOWED_USERS}
+    volumes:
+      - ./configs:/root/configs
+      - ./logs:/root/logs
+      - ./data:/root/data
+    depends_on:
+      - moex-data-fetcher
+    networks:
+      - moex-network
+
+  moex-data-fetcher:
+    image: your-moex-fetcher-image
+    container_name: moex-data-fetcher
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://postgres:0301@postgres:5432/moex_data
+      - HTTP_PORT=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - fetcher_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - moex-network
+
+  postgres:
+    image: postgres:18.1-alpine
+    container_name: moex-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: moex_data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "0301"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - moex-network
+
+volumes:
+  postgres_data:
+  fetcher_logs:
+
+networks:
+  moex-network:
+    driver: bridge
